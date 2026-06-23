@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Economia CDL Solar · Tubarão</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue-50: #E6F1FB;
+    --blue-200: #85B7EB;
+    --blue-500: #185FA5;
+    --blue-700: #0C447C;
+    --blue-900: #042C53;
+    --green-50: #EAF3DE;
+    --green-400: #639922;
+    --green-700: #27500A;
+    --gray-50: #F8F9FA;
+    --gray-100: #F1F3F5;
+    --gray-200: #E9ECEF;
+    --gray-400: #ADB5BD;
+    --gray-600: #6C757D;
+    --gray-900: #212529;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-900);
+    min-height: 100vh;
+    padding: 0 0 4rem;
+  }
+
+  header {
+    background: var(--blue-900);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-mark {
+    width: 36px;
+    height: 36px;
+    background: var(--blue-500);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: -0.5px;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .logo-text span:first-child {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.01em;
+  }
+
+  .logo-text span:last-child {
+    font-size: 11px;
+    color: var(--blue-200);
+    letter-spacing: 0.03em;
+  }
+
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+
+  .hero {
+    background: var(--blue-900);
+    padding: 2rem 1.5rem 3rem;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+  }
+
+  .hero p {
+    font-size: 15px;
+    color: var(--blue-200);
+    line-height: 1.6;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: var(--radius);
+    border: 1px solid var(--gray-200);
+    padding: 1.5rem;
+    margin-top: -1.5rem;
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gray-600);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .input-group {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 0 14px;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.15s;
+    background: #fff;
+  }
+
+  .input-group:focus-within {
+    border-color: var(--blue-500);
+  }
+
+  .input-prefix {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--gray-400);
+    margin-right: 8px;
+    user-select: none;
+  }
+
+  .input-group input[type="number"] {
+    border: none;
+    outline: none;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--gray-900);
+    font-family: 'Inter', sans-serif;
+    width: 100%;
+    padding: 14px 0;
+    background: transparent;
+    -moz-appearance: textfield;
+  }
+
+  .input-group input[type="number"]::-webkit-inner-spin-button,
+  .input-group input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+
+  .result-card {
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+  }
+
+  .result-card.money {
+    background: var(--blue-50);
+  }
+
+  .result-card.green {
+    background: var(--green-50);
+  }
+
+  .result-card .rc-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--blue-500);
+    letter-spacing: 0.03em;
+    margin-bottom: 4px;
+  }
+
+  .result-card.green .rc-label {
+    color: var(--green-400);
+  }
+
+  .result-card .rc-val {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--blue-700);
+    line-height: 1.1;
+  }
+
+  .result-card.green .rc-val {
+    font-size: 18px;
+    color: var(--green-700);
+  }
+
+  .result-card .rc-sub {
+    font-size: 11px;
+    color: var(--blue-500);
+    margin-top: 3px;
+  }
+
+  .result-card.green .rc-sub {
+    color: var(--green-400);
+  }
+
+  .annual-block {
+    background: var(--blue-900);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .annual-block .ab-label {
+    font-size: 12px;
+    color: var(--blue-200);
+    margin-bottom: 4px;
+  }
+
+  .annual-block .ab-val {
+    font-size: 32px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .annual-block .ab-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--blue-500);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--gray-100);
+    margin: 1.5rem 0;
+  }
+
+  .form-field {
+    margin-bottom: 1rem;
+  }
+
+  .form-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-600);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .form-field input[type="text"],
+  .form-field input[type="tel"] {
+    width: 100%;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    color: var(--gray-900);
+    background: #fff;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .form-field input:focus {
+    border-color: var(--blue-500);
+  }
+
+  .cta-btn {
+    width: 100%;
+    background: #25D366;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.15s, transform 0.1s;
+    margin-top: 1.25rem;
+  }
+
+  .cta-btn:hover { background: #1ebe5d; }
+  .cta-btn:active { transform: scale(0.98); }
+
+  .cta-btn svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+
+  .trust-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 1rem;
+    font-size: 12px;
+    color: var(--gray-400);
+  }
+
+  .trust-row span {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gray-300);
+    display: inline-block;
+  }
+
+  .eco-note {
+    background: var(--green-50);
+    border-left: 3px solid var(--green-400);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 0.875rem 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 13px;
+    color: var(--green-700);
+    line-height: 1.5;
+  }
+
+  .eco-note strong {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+    font-size: 13px;
+  }
+
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  .pill {
+    font-size: 12px;
+    color: var(--gray-600);
+    border: 1px solid var(--gray-200);
+    border-radius: 20px;
+    padding: 5px 12px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .pill .dot-green { width: 7px; height: 7px; border-radius: 50%; background: var(--green-400); flex-shrink:0; }
+  .pill .dot-blue  { width: 7px; height: 7px; border-radius: 50%; background: var(--blue-500); flex-shrink:0; }
+
+  .error-msg {
+    font-size: 12px;
+    color: #C0392B;
+    margin-top: 0.75rem;
+    display: none;
+  }
+
+  .success-state {
+    text-align: center;
+    padding: 2rem 1rem;
+    display: none;
+  }
+
+  .success-state .s-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--green-50);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 28px;
+  }
+
+  .success-state h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 0.5rem;
+  }
+
+  .success-state p {
+    font-size: 14px;
+    color: var(--gray-600);
+    line-height: 1.6;
+  }
+
+  footer {
+    text-align: center;
+    padding: 2rem 1.5rem 0;
+    font-size: 12px;
+    color: var(--gray-400);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-mark">CDL</div>
+  <div class="logo-text">
+    <span>CDL Solar · Tubarão</span>
+    <span>Energia por assinatura</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="container">
+    <h1>Quanto você economiza por ano na conta de luz?</h1>
+    <p>10% de desconto garantido. Sem painel solar, sem obra, sem fidelidade.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="card">
+
+    <p class="section-label">Sua conta de luz mensal</p>
+    <div class="input-group">
+      <span class="input-prefix">R$</span>
+      <input type="number" id="conta" value="500" min="0" step="10" inputmode="numeric" />
+    </div>
+
+    <div class="results-grid">
+      <div class="result-card money">
+        <p class="rc-label">Economia mensal</p>
+        <p class="rc-val" id="val-mes">R$ 50</p>
+        <p class="rc-sub">todo mês, automaticamente</p>
+      </div>
+      <div class="result-card green">
+        <p class="rc-label">CO₂ evitado/ano</p>
+        <p class="rc-val" id="val-co2">78 kg</p>
+        <p class="rc-sub">de energia limpa</p>
+      </div>
+    </div>
+
+    <div class="annual-block">
+      <div>
+        <p class="ab-label">Sua economia anual estimada</p>
+        <p class="ab-val" id="val-ano">R$ 600</p>
+      </div>
+      <div class="ab-icon">☀️</div>
+    </div>
+
+    <div class="eco-note" id="eco-note">
+      <strong>Você também estaria ajudando o planeta.</strong>
+      Sua cota corresponde a <span id="eco-txt">78 kg de CO₂ evitados por ano</span> — o equivalente a plantar aproximadamente <span id="eco-arvores">4 árvores</span>.
+    </div>
+
+    <div class="pills">
+      <span class="pill"><span class="dot-green"></span>Sem painel solar</span>
+      <span class="pill"><span class="dot-green"></span>Sem fidelidade</span>
+      <span class="pill"><span class="dot-blue"></span>Garantia CDL</span>
+      <span class="pill"><span class="dot-green"></span>CPF ou CNPJ</span>
+    </div>
+
+    <hr class="divider" />
+
+    <div id="form-area">
+      <p class="section-label">Quero aderir ao programa</p>
+
+      <div class="form-field">
+        <label class="form-label" for="nome">Seu nome</label>
+        <input type="text" id="nome" placeholder="Como prefere ser chamado?" />
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="fone">Seu WhatsApp</label>
+        <input type="tel" id="fone" placeholder="(48) 99999-9999" />
+      </div>
+
+      <p class="error-msg" id="err-msg">Preencha seu nome e telefone para continuar.</p>
+
+      <button class="cta-btn" onclick="enviar()">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.554 4.103 1.523 5.824L.057 23.25a.75.75 0 0 0 .921.921l5.344-1.476A11.934 11.934 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.705 9.705 0 0 1-4.964-1.362l-.355-.213-3.67 1.013 1.033-3.58-.232-.368A9.705 9.705 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/>
+        </svg>
+        Quero meu desconto — falar com a CDL
+      </button>
+
+      <div class="trust-row">
+        <span></span> Sem spam <span></span> Só a CDL entra em contato <span></span>
+      </div>
+    </div>
+
+    <div class="success-state" id="success-area">
+      <div class="s-icon">✅</div>
+      <h2>Ótimo, te esperamos no WhatsApp!</h2>
+      <p>A equipe CDL Solar vai entrar em contato para explicar os próximos passos da adesão.</p>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  CDL Tubarão · Programa de energia por assinatura<br>
+  Energia solar injetada na rede Celesc · Desconto direto na sua conta
+</footer>
+
+<script>
+  const contaEl = document.getElementById('conta');
+
+  function fmt(n) {
+    return 'R$ ' + Math.round(n).toLocaleString('pt-BR');
+  }
+
+  function calc() {
+    const conta = parseFloat(contaEl.value) || 0;
+    const economia = conta * 0.10;
+    const anual = economia * 12;
+    const co2 = Math.round(anual * 0.13);
+    const arvores = Math.max(1, Math.round(co2 / 20));
+
+    document.getElementById('val-mes').textContent = fmt(economia);
+    document.getElementById('val-ano').textContent = fmt(anual);
+    document.getElementById('val-co2').textContent = co2 + ' kg';
+    document.getElementById('eco-txt').textContent = co2 + ' kg de CO₂ evitados por ano';
+    document.getElementById('eco-arvores').textContent = arvores + (arvores === 1 ? ' árvore' : ' árvores');
+  }
+
+  contaEl.addEventListener('input', calc);
+  calc();
+
+  function fmtFone(v) {
+    v = v.replace(/\D/g, '').slice(0, 11);
+    if (v.length <= 2) return '(' + v;
+    if (v.length <= 7) return '(' + v.slice(0,2) + ') ' + v.slice(2);
+    return '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+  }
+
+  document.getElementById('fone').addEventListener('input', function() {
+    const pos = this.selectionStart;
+    this.value = fmtFone(this.value);
+  });
+
+  function enviar() {
+    const nome = document.getElementById('nome').value.trim();
+    const fone = document.getElementById('fone').value.trim();
+    const errEl = document.getElementById('err-msg');
+
+    if (!nome || fone.replace(/\D/g,'').length < 10) {
+      errEl.style.display = 'block';
+      return;
+    }
+    errEl.style.display = 'none';
+
+    const conta = parseFloat(contaEl.value) || 0;
+    const economia = Math.round(conta * 0.10);
+    const anual = Math.round(economia * 12);
+    const co2 = Math.round(anual * 0.13);
+
+    // SUBSTITUA pelo número do WhatsApp do responsável CDL (somente dígitos, com DDI)
+    const wppNumero = '5548999999999';
+
+    const msg = encodeURIComponent(
+      `Olá! Calculei minha economia pelo programa CDL Solar.\n\n` +
+      `💡 Gasto atual: R$ ${Math.round(conta).toLocaleString('pt-BR')}/mês\n` +
+      `💰 Economia mensal: R$ ${economia.toLocaleString('pt-BR')}\n` +
+      `📅 Economia anual: R$ ${anual.toLocaleString('pt-BR')}\n` +
+      `🌱 CO₂ evitado: ${co2} kg/ano\n\n` +
+      `Nome: ${nome}\n` +
+      `Telefone: ${fone}\n\n` +
+      `Quero saber como aderir ao programa!`
+    );
+
+    document.getElementById('form-area').style.display = 'none';
+    document.getElementById('success-area').style.display = 'block';
+
+    setTimeout(() => {
+      window.open(`https://wa.me/${wppNumero}?text=${msg}`, '_blank');
+    }, 800);
+  }
+</script>
+
+</body>
+</html>
